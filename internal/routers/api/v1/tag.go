@@ -60,7 +60,6 @@ func (t Tag) Create(c *gin.Context) {
 		return
 	}
 	response.ToResponse(gin.H{})
-	return
 }
 func (t Tag) Update(c *gin.Context) {
 
@@ -82,7 +81,6 @@ func (t Tag) Update(c *gin.Context) {
 		return
 	}
 	response.ToResponse(gin.H{})
-	return
 }
 func (t Tag) Delete(c *gin.Context) {
 	param := service.DeleteTagRequest{ID: convert.StrTo(c.Param("id")).MustUInt32()}
@@ -99,4 +97,5 @@ func (t Tag) Delete(c *gin.Context) {
 		global.Logger.Errorf("svc.DeleteTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorDeleteTagFail)
 	}
+	response.ToResponse(gin.H{})
 }

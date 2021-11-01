@@ -12,13 +12,12 @@ import (
 )
 
 type Model struct {
-	ID         uint32    `gorm:"primary_key" json:"id"`
-	CreatedBy  string    `json:"created_by"`
-	ModifiedBy string    `json:"modified_by"`
-	CreatedOn  time.Time `json:"created_on"`
-	ModifiedOn time.Time `json:"modified_on"`
-	DeletedOn  time.Time `json:"deleted_on"`
-	IsDel      uint8     `json:"is_del"`
+	ID         uint32         `gorm:"primary_key" json:"id"`
+	CreatedBy  string         `json:"created_by"`
+	ModifiedBy string         `json:"modified_by"`
+	CreatedOn  time.Time      `json:"created_on"`
+	ModifiedOn time.Time      `json:"modified_on"`
+	DeletedOn  gorm.DeletedAt `json:"deleted_on,omitempty"`
 }
 
 func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
@@ -61,11 +60,11 @@ func (m *Model) BeforeCreate(tx *gorm.DB) (err error) {
 func (m *Model) BeforeUpdate(tx *gorm.DB) (err error) {
 	now := time.Now()
 	m.ModifiedOn = now
-	return tx.Model(m).Updates(m).Error
+
+	return
 }
 
 func (m *Model) BeforeDelete(tx *gorm.DB) (err error) {
-	m.DeletedOn = time.Now()
-	m.IsDel = 1
+
 	return
 }

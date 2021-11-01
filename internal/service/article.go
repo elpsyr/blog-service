@@ -1,5 +1,7 @@
 package service
 
+import "github.com/go-programming-tour-book/blog-service/internal/model"
+
 type ArticleRequest struct {
 	ID    uint32 `form:"id" binding:"gte=1"`
 	State uint8  `form:"state,default=1" binding:"oneof=0 1"`
@@ -32,4 +34,23 @@ type UpdateArticleRequest struct {
 
 type DeleteArticleRequest struct {
 	ID uint32 `form:"id" binding:"required,gte=1"`
+}
+
+// 用于返回的结构体
+type Article struct {
+	ID            uint32     `json:"id"`
+	Title         string     `json:"title"`
+	Desc          string     `json:"desc"`
+	Content       string     `json:"content"`
+	CoverImageUrl string     `json:"cover_image_url"`
+	State         uint8      `json:"state"`
+	Tag           *model.Tag `json:"tag"`
+}
+
+func (svc *Service) GetArticle(param *ArticleRequest) (*Article, error) {
+	article, err := svc.dao.GetArticle(param.ID, param.State)
+	if err != nil {
+		return nil, err
+	}
+
 }
